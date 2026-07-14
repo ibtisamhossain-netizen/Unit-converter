@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kilometers and Miles Converter</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe, #ede9fe);
+      color: #1f2937;
+    }
+
+    .converter-card {
+      width: 100%;
+      max-width: 460px;
+      padding: 32px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(31, 41, 55, 0.15);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 28px;
+    }
+
+    .description {
+      margin-bottom: 26px;
+      text-align: center;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    input,
+    select {
+      margin-bottom: 20px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+    }
+
+    input:focus,
+    select:focus {
+      outline: 3px solid rgba(79, 70, 229, 0.18);
+      border-color: #4f46e5;
+    }
+
+    button {
+      border: none;
+      background: #4f46e5;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: #4338ca;
+      transform: translateY(-1px);
+    }
+
+    .result {
+      min-height: 66px;
+      margin-top: 24px;
+      padding: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .error {
+      color: #b91c1c;
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .formula-note {
+      margin-top: 18px;
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="converter-card">
+    <h1>Distance Converter</h1>
+    <p class="description">
+      Enter a distance and choose the direction you want to convert.
+    </p>
+
+    <label for="distance">Distance</label>
+    <input
+      type="number"
+      id="distance"
+      placeholder="Enter a number"
+      step="any"
+    >
+
+    <label for="direction">Conversion direction</label>
+    <select id="direction">
+      <option value="kmToMi">Kilometers → Miles</option>
+      <option value="miToKm">Miles → Kilometers</option>
+    </select>
+
+    <button id="convertButton" type="button">Convert</button>
+
+    <div id="result" class="result" aria-live="polite">
+      Your result will appear here.
+    </div>
+
+    <p class="formula-note">
+      1 kilometer = 0.621371 miles<br>
+      1 mile = 1.60934 kilometers
+    </p>
+  </main>
+
+  <script>
+    const distanceInput = document.getElementById("distance");
+    const directionSelect = document.getElementById("direction");
+    const convertButton = document.getElementById("convertButton");
+    const resultBox = document.getElementById("result");
+
+    function convertDistance() {
+      const inputValue = distanceInput.value.trim();
+      const distance = Number(inputValue);
+      const direction = directionSelect.value;
+
+      resultBox.classList.remove("error");
+
+      if (inputValue === "" || !Number.isFinite(distance)) {
+        resultBox.textContent = "Please enter a valid number.";
+        resultBox.classList.add("error");
+        return;
+      }
+
+      if (distance < 0) {
+        resultBox.textContent = "Please enter a distance of zero or greater.";
+        resultBox.classList.add("error");
+        return;
+      }
+
+      let convertedDistance;
+      let resultText;
+
+      if (direction === "kmToMi") {
+        convertedDistance = distance * 0.621371;
+        resultText = `${distance} kilometers = ${convertedDistance.toFixed(2)} miles`;
+      } else {
+        convertedDistance = distance * 1.60934;
+        resultText = `${distance} miles = ${convertedDistance.toFixed(2)} kilometers`;
+      }
+
+      resultBox.textContent = resultText;
+    }
+
+    convertButton.addEventListener("click", convertDistance);
+
+    distanceInput.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        convertDistance();
+      }
+    });
+  </script>
+</body>
+</html>
